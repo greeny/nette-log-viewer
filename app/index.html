@@ -1,0 +1,113 @@
+<!doctype html>
+<html class="no-js">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+    <!-- build:css(.) styles/vendor.css -->
+    <!-- bower:css -->
+    <!-- endbower -->
+    <!-- endbuild -->
+    <!-- build:css(.tmp) styles/main.css -->
+    <link rel="stylesheet" href="styles/main.css">
+    <!-- endbuild -->
+  </head>
+  <body ng-app="netteLogViewerApp" ng-controller="MainCtrl">
+
+    <!-- Add your site or application content here -->
+    <div ng-class="{'container-fluid': fullWidth, 'container': !fullWidth}">
+
+      <div class="btn-group pull-right">
+        <button type="button" class="btn btn-primary" ng-model="fullWidth" btn-checkbox="" btn-checkbox-true="1"
+                btn-checkbox-false="0">Toggle Full Width
+        </button>
+        <button type="button" class="btn btn-default" ng-click="reload()">
+          <i class="glyphicon glyphicon-refresh"></i> {{ reloadMessage }}
+        </button>
+        <button type="button" class="btn btn-default" ng-model="autoReload" btn-checkbox="" btn-checkbox-true="1"
+                btn-checkbox-false="0">Toggle autoreload
+        </button>
+      </div>
+
+      <h1>Nette Log Viewer</h1>
+      <tabset>
+        <tab heading="{{ type|firstUpper }}" ng-repeat="(type, logs) in data">
+
+          <h2>{{ type|firstUpper }}</h2>
+
+          <div class="text-center">
+            <pagination max-size="20" total-items="logs.length" ng-model="currentPage"></pagination>
+          </div>
+          <table class="table table-bordered table-condensed table-striped">
+            <thead>
+            <tr>
+              <th>Date</th>
+              <th>Message</th>
+              <th>Log File</th>
+            </tr>
+            <tr>
+              <th></th>
+              <th><input placeholder="Filter messages" class="form-control" type="text" ng-model="messageFilter"/></th>
+              <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="log in paginate(logs, currentPage)|filter:messageFilter">
+              <td style="white-space: nowrap">{{ log.date|date }}</td>
+              <td>{{ log.message|limitTo:200 }}</td>
+              <td><a target="_blank" ng-show="log.logFileExists" href="{{ baseUrl }}server/display.php?f={{ log.logFileName }}">{{ log.logFileName }}</a></td>
+            </tr>
+            </tbody>
+          </table>
+        </tab>
+      </tabset>
+
+    </div>
+
+    <!-- build:js(.) scripts/oldieshim.js -->
+    <!--[if lt IE 9]>
+    <script src="bower_components/es5-shim/es5-shim.js"></script>
+    <script src="bower_components/json3/lib/json3.min.js"></script>
+    <![endif]-->
+    <!-- endbuild -->
+
+    <!-- build:js(.) scripts/vendor.js -->
+    <!-- bower:js -->
+    <script src="bower_components/jquery/dist/jquery.js"></script>
+    <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/json3/lib/json3.js"></script>
+    <script src="bower_components/bootstrap-sass-official/assets/javascripts/bootstrap/affix.js"></script>
+    <script src="bower_components/bootstrap-sass-official/assets/javascripts/bootstrap/alert.js"></script>
+    <script src="bower_components/bootstrap-sass-official/assets/javascripts/bootstrap/button.js"></script>
+    <script src="bower_components/bootstrap-sass-official/assets/javascripts/bootstrap/carousel.js"></script>
+    <script src="bower_components/bootstrap-sass-official/assets/javascripts/bootstrap/collapse.js"></script>
+    <script src="bower_components/bootstrap-sass-official/assets/javascripts/bootstrap/dropdown.js"></script>
+    <script src="bower_components/bootstrap-sass-official/assets/javascripts/bootstrap/tab.js"></script>
+    <script src="bower_components/bootstrap-sass-official/assets/javascripts/bootstrap/transition.js"></script>
+    <script src="bower_components/bootstrap-sass-official/assets/javascripts/bootstrap/scrollspy.js"></script>
+    <script src="bower_components/bootstrap-sass-official/assets/javascripts/bootstrap/modal.js"></script>
+    <script src="bower_components/bootstrap-sass-official/assets/javascripts/bootstrap/tooltip.js"></script>
+    <script src="bower_components/bootstrap-sass-official/assets/javascripts/bootstrap/popover.js"></script>
+    <script src="bower_components/angular-resource/angular-resource.js"></script>
+    <script src="bower_components/angular-cookies/angular-cookies.js"></script>
+    <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+    <script src="bower_components/angular-animate/angular-animate.js"></script>
+    <script src="bower_components/angular-touch/angular-touch.js"></script>
+    <script src="bower_components/angular-route/angular-route.js"></script>
+    <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+    <script src="bower_components/angular-local-storage/angular-local-storage.js"></script>
+    <!-- endbower -->
+    <!-- endbuild -->
+
+        <!-- build:js({.tmp,app}) scripts/scripts.js -->
+        <script src="scripts/app.js"></script>
+        <script src="scripts/controllers/main.js"></script>
+        <script src="scripts/services/configuration.js"></script>
+        <script src="scripts/services/list.js"></script>
+        <script src="scripts/filters/firstupper.js"></script>
+        <script src="scripts/filters/paginate.js"></script>
+        <!-- endbuild -->
+</body>
+</html>
